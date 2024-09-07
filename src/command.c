@@ -3,7 +3,37 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define MAX_INPUT_SIZE 1024
+#define MAX_INPUT 1024
+
+enum COMMANDS
+{
+	CD		= 0,
+	PWD		= 1,
+	EXTERNAL 	= 99,
+};
+
+char* t_getcwd() 
+{
+	char* cwd = (char*)malloc(sizeof(char) * MAX_INPUT);
+	if(getcwd(cwd,MAX_INPUT) != NULL)
+	{
+		return cwd;
+	}
+		perror("getcwd() error");
+		return NULL;
+}
+
+void change_directory()
+{
+}
+
+void parse_command(char* cmd)
+{
+	switch(cmd)
+	{
+		case "cd"
+	}
+}
 
 void run_command(char *cmd) {
     pid_t pid = fork();

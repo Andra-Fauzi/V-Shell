@@ -1,26 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include "command.h"
 
 #define MAX_INPUT 1024
-
-char* t_getcwd() 
-{
-	char* cwd = (char*)malloc(sizeof(char) * MAX_INPUT);
-	if(getcwd(cwd,MAX_INPUT) != NULL)
-	{
-		return cwd;
-	}
-		perror("getcwd() error");
-		return NULL;
-}
 
 void terminal_run()
 {
 	char input[MAX_INPUT];
+	char* cwd;
 	while(1)
 	{
-		char* cwd = t_getcwd();
+		cwd = t_getcwd();
 		if(cwd != NULL)
 		{
 			printf("%s$",cwd);
@@ -29,12 +21,18 @@ void terminal_run()
 				perror("fgets failed");
 				exit(EXIT_FAILURE);
 			}
+			input[strcspn(input, "\n")] = '\0';
+			if(strcmp(input,"exit") == 0)
+			{
+				break;
+			}
+			parse_command(input);
 		}
 		else 
 		{
 			perror("cwd failed");
 			exit(EXIT_FAILURE);
 		}
-		free(cwd);
 	}
+	free(cwd);
 }
